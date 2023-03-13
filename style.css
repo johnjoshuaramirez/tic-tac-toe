@@ -1,0 +1,148 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+body {
+   margin: 0;
+   padding: 0;
+   background-color: black;
+   color: white;
+}
+
+* {
+   box-sizing: border-box;
+   font-family: 'Poppins', sans-serif;
+}
+
+h1 {
+   font-size: 2rem;
+}
+
+.container {
+   /* display: none; */
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   flex-direction: column;
+   padding: 2rem;
+   height: 100vh;
+}
+
+#gameboard {
+   width: 450px;
+   display: flex;
+   flex-wrap: wrap;
+   margin-top: 40px;
+   font-size: 8rem;
+   font-weight: bold;
+}
+
+.box {
+   height: 150px;
+   width: 150px;
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   cursor: default;
+   color: goldenrod;
+}
+
+.box:nth-child(2),
+.box:nth-child(5),
+.box:nth-child(8) {
+   border-left: 1px solid white;
+   border-right: 1px solid white;
+}
+
+.box:nth-child(4),
+.box:nth-child(5),
+.box:nth-child(6) {
+   border-top: 1px solid white;
+   border-bottom: 1px solid white;
+}
+
+@keyframes blowUpModal {
+   0% {
+      transform: scale(0);
+   }
+
+   100% {
+      transform: scale(1);
+   }
+}
+
+
+.modal {
+   display: none;
+   justify-content: center;
+   align-items: center;
+   border: 1px solid white;
+   background-color: black;
+
+   position: absolute;
+   top: 50%;
+   left: 50%;
+   transform: translate(-50%, -50%);
+   width: 24rem;
+   height: 16rem;
+}
+
+#restartButton {
+   cursor: pointer;
+   padding: 1rem;
+   border: 1px solid white;
+   font-size: 2rem;
+   font-weight: bold;
+}
+
+#restartButton:hover {
+   background-color: gray;
+}
+
+.startScreen {
+   height: 100vh;
+   width: 100vw;
+   display: flex;
+   flex-direction: column;
+   justify-content: center;
+   align-items: center;
+   gap: 1rem;
+   background-color: black;
+
+   position: absolute;
+   top: 50%;
+   left: 50%;
+   transform: translate(-50%, -50%);
+}
+
+.startScreen div {
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   gap: 1rem;
+}
+
+#x {
+   height: 150px;
+   width: 150px;
+   border: 1px solid white;
+   font-size: 8rem;
+   font-weight: bold;
+   color: goldenrod;
+   
+}
+
+#o {
+   height: 150px;
+   width: 150px;
+   border: 1px solid white;
+   font-size: 8rem;
+   font-weight: bold;
+   color: goldenrod;
+}
+
+#x:hover, #o:hover {
+   background-color: gray;
+   cursor: pointer;
+}
+#x:active, #o:active {
+   background-color: black;
+}
