@@ -20,50 +20,6 @@ const dom = (() => {
 	};
 })();
 
-// const game = (() => {
-//    const o_player = '◯';
-// 	const x_player = '✕';
-//    let array = Array(9);
-//    let randomIndex = Math.floor(Math.random() * 9);
-//    let count = 0;
-//    let currentPlayer = null;
-//    let aiPlayer = null;
-// 	let gameWinner = null;
-//    let gameHasWon = false;
-// 	const	winLines = [
-// 			[0, 1, 2],
-// 			[3, 4, 5],
-// 			[6, 7, 8],
-// 			[0, 3, 6],
-// 			[1, 4, 7],
-// 			[2, 5, 8],
-// 			[0, 4, 8],
-// 			[2, 4, 6]
-// 		];
-
-// 	return {
-//       get_o_player: () => o_player,
-//       get_x_player: () => x_player,
-//       get_count: () => count,
-//       get_currentPlayer: () => currentPlayer,
-//       get_aiPlayer: () => aiPlayer,
-//       get_array: () => array,
-//       get_gameWinner: () => gameWinner,
-//       get_gameHasWon: () => gameHasWon,
-//       get_randomIndex: () => randomIndex,
-//       get_winLines: () => winLines,
-//       increment_count: () => count++,
-//       set_count: (setCount) => count = setCount,
-//       set_currentPlayer: (setCurrentPlayer) => currentPlayer = setCurrentPlayer,
-//       set_aiPlayer: () => (setAiPlayer) => aiPlayer = setAiPlayer,
-//       reset_array: () => array = Array(9),
-//       set_arrayItem: (index, mark) => array[index] = mark,
-//       set_gameWinner: (setGameWinner) => gameWinner = setGameWinner,
-//       set_gameHasWon: (setGameHasWon) => gameHasWon = setGameHasWon,
-//       set_randomIndex: (setRandomIndex) => randomIndex = setRandomIndex
-// 	};
-// })();
-
 const gameController = (() => {
 	const o_player = '◯';
 	const x_player = '✕';
