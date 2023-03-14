@@ -94,7 +94,6 @@ const gameController = (() => {
 			dom.get_playText().innerText = `${gameWinner} has won!`;
 			setTimeout(() => (dom.get_container().style.display = 'none'), 2100);
 			setTimeout(() => (dom.get_modal().style.display = 'flex'), 2100);
-			return;
 		}
 
 		if (count === 9) {
@@ -102,7 +101,6 @@ const gameController = (() => {
 			dom.get_playText().innerText = `Tie Game!`;
 			setTimeout(() => (dom.get_container().style.display = 'none'), 2100);
 			setTimeout(() => (dom.get_modal().style.display = 'flex'), 2100);
-			return;
 		}
 	};
 
