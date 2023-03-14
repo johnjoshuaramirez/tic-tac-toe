@@ -1,154 +1,210 @@
-const gameBoard = (() => {
+const dom = (() => {
+	const container = document.querySelector('#gameboard');
+	const boxes = Array.from(document.querySelectorAll('.box'));
+	const playText = document.querySelector('#playText');
+	const restartButton = document.querySelector('#restartButton');
+	const modal = document.querySelector('.modal');
+	const startScreen = document.querySelector('.startScreen');
+	const x = document.querySelector('#x');
+	const o = document.querySelector('#o');
+
 	return {
-		count: 0,
-		o_player: '◯',
-		x_player: '✕',
-		currentPlayer: null,
-		aiPlayer: null,
-		array: Array(9),
-      gameWinner: null,
-      gameHasWon: false,
-		container: document.querySelector('#gameboard'),
-		boxes: Array.from(document.querySelectorAll('.box')),
-		playText: document.querySelector('#playText'),
-		restartButton: document.querySelector('#restartButton'),
-		modal: document.querySelector('.modal'),
-		startScreen: document.querySelector('.startScreen'),
-		x: document.querySelector('#x'),
-		o: document.querySelector('#o'),
-		randomIndex: Math.floor(Math.random() * 9),
-		winLines: [
-			[0, 1, 2],
-			[3, 4, 5],
-			[6, 7, 8],
-			[0, 3, 6],
-			[1, 4, 7],
-			[2, 5, 8],
-			[0, 4, 8],
-			[2, 4, 6]
-		]
+		get_container: () => container,
+		get_boxes: () => boxes,
+		get_playText: () => playText,
+		get_restartButton: () => restartButton,
+		get_modal: () => modal,
+		get_startScreen: () => startScreen,
+		get_x: () => x,
+		get_o: () => o
 	};
 })();
 
+// const game = (() => {
+//    const o_player = '◯';
+// 	const x_player = '✕';
+//    let array = Array(9);
+//    let randomIndex = Math.floor(Math.random() * 9);
+//    let count = 0;
+//    let currentPlayer = null;
+//    let aiPlayer = null;
+// 	let gameWinner = null;
+//    let gameHasWon = false;
+// 	const	winLines = [
+// 			[0, 1, 2],
+// 			[3, 4, 5],
+// 			[6, 7, 8],
+// 			[0, 3, 6],
+// 			[1, 4, 7],
+// 			[2, 5, 8],
+// 			[0, 4, 8],
+// 			[2, 4, 6]
+// 		];
+
+// 	return {
+//       get_o_player: () => o_player,
+//       get_x_player: () => x_player,
+//       get_count: () => count,
+//       get_currentPlayer: () => currentPlayer,
+//       get_aiPlayer: () => aiPlayer,
+//       get_array: () => array,
+//       get_gameWinner: () => gameWinner,
+//       get_gameHasWon: () => gameHasWon,
+//       get_randomIndex: () => randomIndex,
+//       get_winLines: () => winLines,
+//       increment_count: () => count++,
+//       set_count: (setCount) => count = setCount,
+//       set_currentPlayer: (setCurrentPlayer) => currentPlayer = setCurrentPlayer,
+//       set_aiPlayer: () => (setAiPlayer) => aiPlayer = setAiPlayer,
+//       reset_array: () => array = Array(9),
+//       set_arrayItem: (index, mark) => array[index] = mark,
+//       set_gameWinner: (setGameWinner) => gameWinner = setGameWinner,
+//       set_gameHasWon: (setGameHasWon) => gameHasWon = setGameHasWon,
+//       set_randomIndex: (setRandomIndex) => randomIndex = setRandomIndex
+// 	};
+// })();
+
 const gameController = (() => {
+	const o_player = '◯';
+	const x_player = '✕';
+	let array = Array(9);
+	let randomIndex = Math.floor(Math.random() * 9);
+	let count = 0;
+	let currentPlayer = null;
+	let aiPlayer = null;
+	let gameWinner = null;
+	let gameHasWon = false;
+	const winLines = [
+		[0, 1, 2],
+		[3, 4, 5],
+		[6, 7, 8],
+		[0, 3, 6],
+		[1, 4, 7],
+		[2, 5, 8],
+		[0, 4, 8],
+		[2, 4, 6]
+	];
+
+	const aiChoice = () => {
+		if (!array[randomIndex]) {
+			count++;
+			dom.get_container().style.pointerEvents = 'auto';
+			array[randomIndex] = aiPlayer;
+			document.getElementById(randomIndex).innerText = aiPlayer;
+			evaluateResult();
+			return;
+		}
+
+		randomIndex = Math.floor(Math.random() * 9);
+		aiChoice();
+	};
+
+	const playerPick = e => {
+		if (e.target.id === 'x') {
+			currentPlayer = x_player;
+			aiPlayer = o_player;
+			dom.get_startScreen().style.display = 'none';
+			dom.get_container().style.display = 'flex';
+		}
+
+		if (e.target.id === 'o') {
+			currentPlayer = o_player;
+			aiPlayer = x_player;
+			dom.get_startScreen().style.display = 'none';
+			dom.get_container().style.display = 'flex';
+			dom.get_container().style.pointerEvents = 'none';
+			setTimeout(aiChoice, 700);
+		}
+	};
+
 	const match = () => {
-		for (const line of gameBoard.winLines) {
-			const { array } = gameBoard;
+		for (const line of winLines) {
 			const [a, b, c] = line;
 			if (array[a] && array[a] === array[b] && array[a] === array[c]) {
-				gameBoard.gameWinner = array[a]
-            // console.log(line[a]);
+				gameWinner = array[a];
 				return line;
 			}
 		}
 		return false;
 	};
 
-	const pickChoice = e => {
-		if (e.target.id === 'x') {
-			gameBoard.currentPlayer = gameBoard.x_player;
-			gameBoard.aiPlayer = gameBoard.o_player;
-			gameBoard.startScreen.style.display = 'none';
-			gameBoard.container.style.display = 'flex';
-		}
-
-		if (e.target.id === 'o') {
-			gameBoard.currentPlayer = gameBoard.o_player;
-			gameBoard.aiPlayer = gameBoard.x_player;
-			gameBoard.startScreen.style.display = 'none';
-			gameBoard.container.style.display = 'flex';
-
-         gameBoard.container.style.pointerEvents = 'none';
-         setTimeout(gameController.aiChoice, 700);
-		}
-	};
-
-	const aiChoice = () => {
-		if (!gameBoard.array[gameBoard.randomIndex]) {
-         gameBoard.count++;
-         gameBoard.container.style.pointerEvents = 'auto';
-			gameBoard.array[gameBoard.randomIndex] = gameBoard.aiPlayer;
-			document.getElementById(gameBoard.randomIndex).innerText = gameBoard.aiPlayer;
-			gameController.evaluateResult();
-			return;
-		}
-
-		gameBoard.randomIndex = Math.floor(Math.random() * 9);
-		aiChoice();
-	};
-
 	const evaluateResult = () => {
-		if (gameController.match()) {
-         gameBoard.gameHasWon = true;
-			gameController.match().forEach(id => {
-				document.getElementById(id).style.color = 'white';
+		if (match()) {
+			gameHasWon = true;
+			match().forEach(i => {
+				document.getElementById(i).style.color = 'white';
 			});
-			gameBoard.container.style.pointerEvents = 'none';
-			gameBoard.playText.innerText = `${gameBoard.gameWinner} has won!`;
-			setTimeout(() => (gameBoard.container.style.display = 'none'), 2100);
-			setTimeout(() => (gameBoard.modal.style.display = 'flex'), 2100);
+			dom.get_container().style.pointerEvents = 'none';
+			dom.get_playText().innerText = `${gameWinner} has won!`;
+			setTimeout(() => (dom.get_container().style.display = 'none'), 2100);
+			setTimeout(() => (dom.get_modal().style.display = 'flex'), 2100);
 			return;
 		}
 
-		if (gameBoard.count === 9) {
-			gameBoard.container.style.pointerEvents = 'none';
-			gameBoard.playText.innerText = `Tie Game!`;
-			setTimeout(() => (gameBoard.container.style.display = 'none'), 2100);
-			setTimeout(() => (gameBoard.modal.style.display = 'flex'), 2100);
+		if (count === 9) {
+			dom.get_container().style.pointerEvents = 'none';
+			dom.get_playText().innerText = `Tie Game!`;
+			setTimeout(() => (dom.get_container().style.display = 'none'), 2100);
+			setTimeout(() => (dom.get_modal().style.display = 'flex'), 2100);
 			return;
 		}
 	};
 
 	const restartGame = () => {
-		gameBoard.count = 0;
-		gameBoard.playText.innerText = `Let's Play!`;
-		gameBoard.array = Array(9);
-		gameBoard.container.style.pointerEvents = 'auto';
-		gameBoard.container.style.display = 'none';
-		gameBoard.modal.style.display = 'none';
-		gameBoard.startScreen.style.display = 'flex';
-      gameBoard.gameHasWon = false;
-		gameBoard.boxes.forEach(box => {
-			box.innerText = '';
-			box.style.color = 'goldenrod';
-			box.addEventListener('click', displayController.boxClicked);
-		});
-		gameBoard.restartButton.addEventListener('click', gameController.restartGame);
-		gameBoard.startScreen.addEventListener('click', pickChoice);
+		count = 0;
+		gameHasWon = false;
+		array = Array(9);
+		dom.get_playText().innerText = `Let's Play!`;
+		dom.get_container().style.pointerEvents = 'auto';
+		dom.get_container().style.display = 'none';
+		dom.get_modal().style.display = 'none';
+		dom.get_startScreen().style.display = 'flex';
+		dom.get_boxes().forEach(box => displayController.clearBoxes(box));
+		dom.get_restartButton().addEventListener('click', gameController.restartGame);
+		dom.get_startScreen().addEventListener('click', playerPick);
 	};
 
 	return {
 		match,
 		aiChoice,
-      evaluateResult,
-		restartGame
+		evaluateResult,
+		restartGame,
+		get_array: () => array,
+		get_currentPlayer: () => currentPlayer,
+		get_gameHasWon: () => gameHasWon,
+		get_count: () => count,
+		increment_count: () => count++,
+		set_arrayItem: index => (array[index] = currentPlayer)
 	};
 })();
 
 const displayController = (() => {
 	const boxClicked = e => {
 		const id = e.target.id;
-		if (!gameBoard.array[id]) {
-			gameBoard.count++;
-			gameBoard.array[id] = gameBoard.currentPlayer;
-			e.target.innerText = gameBoard.currentPlayer;
-
+		if (!gameController.get_array()[id]) {
+			e.target.innerText = gameController.get_currentPlayer();
+			gameController.increment_count();
+			gameController.set_arrayItem(id);
 			gameController.evaluateResult();
 
-         if (gameBoard.gameHasWon) return;
-
-         if (gameBoard.count < 9) {
-            gameBoard.container.style.pointerEvents = 'none';
-            setTimeout(gameController.aiChoice, 700);
-         }
+			if (gameController.get_gameHasWon()) return;
+			if (gameController.get_count() < 9) {
+				dom.get_container().style.pointerEvents = 'none';
+				setTimeout(gameController.aiChoice, 700);
+			}
 		}
 	};
 
+	const clearBoxes = (box) => {
+		box.innerText = '';
+		box.style.color = 'goldenrod';
+		box.addEventListener('click', boxClicked);
+	};
+
 	return {
-		boxClicked
+		boxClicked,
+      clearBoxes
 	};
 })();
 
 gameController.restartGame();
-
-// console.log(randomIndex);
